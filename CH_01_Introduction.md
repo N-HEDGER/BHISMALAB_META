@@ -133,6 +133,7 @@ tidy(META2)
 
 ```r
 # Forest plot of the data.
+par(mar=c(4,4,1,2))
 forest(cumul(META2))
 ```
 
@@ -142,4 +143,60 @@ The above plot is again a forest plot, but this time it shows the effect of fitt
 
 We see that from study 1 to study 3, our combined confidence interval width has reduced from 0.8 to 0.47. This is an incredibly valuable increase in precision. Moreover, the pooled p value has reduced substantially from 0.49 to .0006. 
 
-The take home message here is that meta analysis greatly improves the precision of our parameter estimates. The example also illustrates that several studies indicating weak evidence for an effect, when combined, can indicate very strong evidence of an effect
+The take home message here is that meta analysis greatly improves the precision of our parameter estimates. The example also illustrates that several studies indicating weak evidence for an effect, when combined, can indicate very strong evidence of an effect.
+
+
+### Example 3: Apples and Oranges
+
+Lets suppose that we are performing a meta analysis on 10 studies that investigate the effect of threatening stimuli on visual search performance. In these studies, a positive of the effect size indicates that threatening stimuli were detected more rapidly than neutral stimuli.
+
+
+```r
+Study1=ptoDr(.049,26,0.5)
+Study2=ptoDr(.01,20,0.5)
+Study3=ptoDr(.049,21,0.5)
+Study4=ptoDr(.006,15,0.5)
+Study5=ptoDr(.049,10,0.5)
+Study6=ptoDr(.3,26,0.5)
+Study7=ptoDr(.5,85,0.5)
+Study8=ptoDr(.10,26,0.5)
+Study9=ptoDr(.9,29,0.5)
+Study10=ptoDr(.6,70,0.5)
+
+DATA3=data.frame(rbind(Study1,Study2,Study3,Study4,Study5,Study6,Study7,Study8,Study9,Study10))
+
+colnames(DATA3)=c("D","SE")
+
+META3=rma(yi=D,sei=SE,data=DATA3)
+
+forest(META3)
+```
+
+![](CH_01_Introduction_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+```r
+tidy(META3)
+```
+
+```
+## [1] "The pooled effect size is 0.285605"                               
+## [2] "The lower limit of the 95 percent confidence interval is 0.125040"
+## [3] "The upper limit of the 95 percent confidence interval is 0.446170"
+## [4] "The pooled p value is 0.000490"
+```
+
+
+The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. 
+
+Later, after inspecting the papers more closely, we realise that studies 1-5 used fearful faces as threat stimuli and studies 6-10 used angry faces. In order to determine whether the choice of stimulus explains this heterogeneity, we perform a *moderator analysis* 
+
+
+```r
+DATA3$Stimulus=c(rep(1,5),rep(2,5))
+DATA3$Stimulus=factor(DATA3$Stimulus, levels=c(1,2),labels=c("Fear","Angry"))
+META3_MOD=rma(yi=D,sei=SE,data=DATA3,mods=~Stimulus)
+
+forest(META3_MOD)
+```
+
+![](CH_01_Introduction_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
