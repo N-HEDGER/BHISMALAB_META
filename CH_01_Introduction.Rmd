@@ -25,19 +25,19 @@ The power of meta analysis is best illustrated with some examples.
 ### Example 1: Lucky and Unlucky
 
 
-Lets suppose that we have two studies that are replications of one another. The first study, published by Lucky et al (2012) in Current Biology revealed a large, significant effect (N = 26, p=.0001). The second study, published by Unlucky et al (2015) failed to detect a statistically significant effect (N= 28, p=.12). Since Unlucky failed to replicate Luckys finidng with a larger sample, they questioned the existence of the effect. 
+Lets suppose that we have two studies that are replications of one another. The first study, published by Lucky et al (2012) in Current Biology revealed a large, significant effect (N = 26, p=.0001). The second study, published by Unlucky et al (2015) in a low-impact journal failed to detect a statistically significant effect (N= 28, p=.12). Since Unlucky failed to replicate Luckys finidng in a larger sample, they questioned the existence of the effect. 
 
-These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should accept the null. Intuitively, we know that we should have more faith on the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we should take to the bank.
+These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should retain the null. Intuitively, we know that we should have more faith on the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we take to the bank.
 
 What happens if we perform a meta analysis on the data?
 
-The code below will define some utility functions, perform a meta analysis on the two studies and output a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
+The code below will define some utility functions, perform a meta analysis on the two studies and report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
 
 ```{r}
 # Import metafor library
 library(metafor)
 
-# Function for converting from p value and N to Cohen's d and 95% CI's
+# Define a function for converting from p value and N to Cohen's d and 95% CI's
 ptoDr=function(p,N,r)
 {T=qt(p/2,N-1)
 D=T/sqrt(N)
@@ -48,7 +48,7 @@ CIp=Da2+(SE*1.96)
 CIn=Da2-(SE*1.96)
 DSE=c(Da2,SE,CIn,CIp)}
 
-# Function for outputing information from rma object
+# Define a function for outputing information from rma object
 tidy=function(obj)
 {sprintf(c("The pooled effect size is %f","The lower limit of the 95 percent confidence interval is %f","The upper limit of the 95 percent confidence interval is %f","The pooled p value is %f"),c(obj$beta,obj$ci.lb,obj$ci.ub,obj$pval))}
   
@@ -61,7 +61,7 @@ Unlucky=ptoDr(.12,28,0.5)
 DATA=data.frame(rbind(Lucky,Unlucky))
 colnames(DATA)=c("D","SE")
 
-# Estimate random effects model.
+# Estimate random effects model and report some model results
 META=rma(yi=D,sei=SE,data=DATA)
 tidy(META)
 
@@ -73,21 +73,23 @@ forest(META,slab=c("Lucky (2012)","Unlucky (2015)"))
 ```
 
 
-The above plot is known as a forest plot. It depicts the effects sizes and confidence intervals for the two individual studies and the meta analytic combination of these effects is depicted by a diamond.
+The above plot is known as a forest plot. It depicts the effects sizes and confidence intervals for the two individual studies. Below the two contributing studies, the meta analytic combination of the effects is depicted by a diamond.
 
-Here, we see that despite the fact that Lucky and Unlucky rejected and retained the null hypothesis respectively, both effects are in the same direction and the overall effect is significant. Perhaps there was not much of a conflict after all.
+Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However both effects are in the same direction and the confidence intervals overlap. Importantly, the meta analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
 
-This illustrates one of the main advantages of meta analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta analysis allows us to "see the wood for the trees". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
+This illustrates one of the main advantages of meta analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta analysis allows us to "*see the wood for the trees*". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't really how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
 
 
 ### Example 2: A miraculous replication
 
 
-In 2001, a group of researchers found that a new treatment was effective at reducing depression. 
+In 2001, a group of researchers found that a new treatment was effective at reducing depression (N=26, p=.049). 
 
 Unfortunately the authors only had access to a small sample and so the confidence interval around their effect size estimate was very large.
 
-In 2008 they managed to perform a replication study with an independent sample of participants. Miraculously, they found that the effect was identical in magnitude! In 2011, they replicated the study and again found exactly the same effect!
+In 2008 they managed to perform a replication study with an independent sample of participants . Miraculously, they found that the effect was identical in magnitude! (N=26, p=.049). In 2011, they replicated the study and again found exactly the same effect! (N=26, p=.049).
+
+The code below will fit a meta-analytic model to these studies and plot a slightly adapted version of a forest plot, which will be described below.
 
 ```{r}
 Study2001=ptoDr(.049,26,0.5)
@@ -109,7 +111,7 @@ par(mar=c(4,4,1,2))
 forest(cumul(META2))
 ```
 
-The above plot is again a forest plot, but this time it shows the effect of fitting a meta-analytic model after each successive study is published. 
+The above plot is again a forest plot, but this time it shows the effect of fitting a meta-analytic model after each successive study is published (otherwise known as a cumulative meta analysis). 
 
 We see that from study 1 to study 3, our combined confidence interval width has reduced from 0.8 to 0.47. This is an incredibly valuable increase in precision. Moreover, the pooled p value has reduced substantially from 0.49 to .0006. 
 
@@ -118,7 +120,7 @@ The take home message here is that meta analysis greatly improves the precision 
 
 ### Example 3: Apples and Oranges
 
-Lets suppose that we are performing a meta analysis on 10 studies that investigate the effect of threatening stimuli on visual search performance. In these studies, a positive of the effect size indicates that threatening stimuli were detected more rapidly than neutral stimuli.
+Lets suppose that we are performing a meta analysis on 10 studies that investigate the effect of threatening stimuli on visual search performance. In these studies, a positive value of the effect size indicates that threatening stimuli are detected more rapidly than neutral stimuli.
 
 ```{r}
 Study1=ptoDr(.049,26,0.5)
@@ -145,16 +147,22 @@ tidy(META3)
 ```
 
 
-The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. 
+The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. Some studies seem to indicate fairly large effects, others fairly small effects. 
 
 Later, after inspecting the papers more closely, we realise that studies 1-5 used fearful faces as threat stimuli and studies 6-10 used angry faces. In order to determine whether the choice of stimulus explains this heterogeneity, we perform a *moderator analysis* 
 
 ```{r}
 
+# Code studies 1 to 5 as using fearful faces and the rest as angry.
 DATA3$Stimulus=c(rep(1,5),rep(2,5))
 DATA3$Stimulus=factor(DATA3$Stimulus, levels=c(1,2),labels=c("Fear","Angry"))
+
+# Fit the model, specifying stimulus type as a moderator.
 META3_MOD=rma(yi=D,sei=SE,data=DATA3,mods=~Stimulus)
 
+# Show a forest plot
 forest(META3_MOD)
 
 ```
+
+In the above forest plot we see our data, with an underlayed grey diamond 
