@@ -29,12 +29,16 @@ These results appear to be somewhat in conflict with one another. The first stud
 
 What happens if we perform a meta analysis on the data?
 
-The code below will define some utility functions, perform a meta analysis on the two studies and report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
+The code below will define some utility functions, perform a meta analysis on the two studies, report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
 
 
 ```r
 # Import metafor library
 library(metafor)
+```
+
+```
+## Warning: package 'metafor' was built under R version 3.2.5
 ```
 
 ```
@@ -207,4 +211,87 @@ forest(META3_MOD)
 
 ![](CH_01_Introduction_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-In the above forest plot we see our data, with an underlayed grey diamond 
+In the above forest plot we see our data, with an underlayed grey diamond. The grey diamond under the first 5 effects indicates the overall effect of fearful faces. The grey diamond under the effects 6-10 indicates the overall effect of angry faces. This plot seems pretty ugly to me, so lets make our own, prettier plot in ggplot2 to make things prettier.
+
+
+```r
+# Define ggplot function
+
+# Apply to model object.
+```
+
+Here we have a slightly different implementation of the plot. On the X axis we have our 2 moderator levels and on the Y axis we have the effect size (Cohen's d). We have shelved the confidence intervals for the individual studies and instead have one combined confidence interval for each level of our moderator. We can see that substantially different pooled effect sizes are estimated for fear and angry faces, but is the effect of the 'Stimulus' moderator significant? To answer this question, let's inspect the model object.
+
+
+```r
+# Print model summary
+
+META3_MOD
+```
+
+```
+## 
+## Mixed-Effects Model (k = 10; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0140)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## R^2 (amount of heterogeneity accounted for):            100.00%
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 8) = 3.8891, p-val = 0.8670
+## 
+## Test of Moderators (coefficient(s) 2): 
+## QM(df = 1) = 12.1153, p-val = 0.0005
+## 
+## Model Results:
+## 
+##                estimate      se     zval    pval    ci.lb    ci.ub     
+## intrcpt          0.5599  0.1127   4.9673  <.0001   0.3390   0.7809  ***
+## StimulusAngry   -0.4536  0.1303  -3.4807  0.0005  -0.7091  -0.1982  ***
+## 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+The 'test of moderators' has detected a significant effect of Stimulus (Q(1)=12.1153, p =.0005). Our fitted parameters indicate that Angry faces yield effect sizes that are -0.45 less than fearful faces (the intercept). However, in order to determine whether angry faces themselves yield a detectable effect, we need a different parameterization of the model.
+
+
+```r
+META3_MOD2=rma(yi=D,sei=SE,data=DATA3,mods=~Stimulus-1)
+
+# Print model summary
+META3_MOD2
+```
+
+```
+## 
+## Mixed-Effects Model (k = 10; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0140)
+## tau (square root of estimated tau^2 value):             0
+## I^2 (residual heterogeneity / unaccounted variability): 0.00%
+## H^2 (unaccounted variability / sampling variability):   1.00
+## 
+## Test for Residual Heterogeneity: 
+## QE(df = 8) = 3.8891, p-val = 0.8670
+## 
+## Test of Moderators (coefficient(s) 1:2): 
+## QM(df = 2) = 27.3150, p-val < .0001
+## 
+## Model Results:
+## 
+##                estimate      se    zval    pval    ci.lb   ci.ub     
+## StimulusFear     0.5599  0.1127  4.9673  <.0001   0.3390  0.7809  ***
+## StimulusAngry    0.1063  0.0654  1.6249  0.1042  -0.0219  0.2345     
+## 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Here we see that a robust effect has been detected for fear faces (d = 0.56, p<.0001), whereas angry faces do not yield detectable effects (d = 0.11, p=.104). In some ways, it seems as though we were initially combining 'apples and oranges' into the same analysis.
+
+This example illustrates an important application of meta analysis - here we have answered a novel research question that was never addressed by any of these individual studies (all studies employed only 1 stimulus type and so could address the question of whether fear faces yielded larger effects than engry faces). We can extend this process to define arbitrarily complex models, including multiple factors and their interactions, so we can optimally explain a set of studies. 
+
+
