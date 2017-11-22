@@ -1,0 +1,31 @@
+---
+title: "CH_02_GatheringData"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Chapter 2: Gathering data.
+
+In this chapter, we will focus on the nuts and bolts of gathering data for meta analyses.  Empirical papers can vary wildly in terms of the information that they report and so a number of strategies are needed to estimate an effect size.
+
+This chapter will focus soley on Cohen's d, since it is by far the most commonly used effect size. In principle though, the steps that we go though will be more or less the same regardless of the effect size we wish to compute.
+
+Cohen's d actually can actually be estimated in a number of ways, but the Generic formula is:
+
+(Mean 1 - Mean 2)/ SD
+
+Cohens d therefore represents the difference between two means in standard deviation units. The denominator of the equation is ambiguous - a standard deviation is referred to, but there are actually a number of possibilities here. We could use:
+
+The SD of Group 1
+The SD of Group 2
+The SD of the difference between Group 1 and Group 2.
+The pooled SD of group 1 and group 2.
+
+In fact, these are all legitimate options. The choice of standardiser can depend on a number of factors and these are described excellently in a paper by Lakens (2013). The most important thing is to be as *clear and consistent* as possible.
+
+
+
+
