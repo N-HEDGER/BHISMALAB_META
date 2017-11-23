@@ -12,7 +12,7 @@ You will need the following installed on your system:
 
 1. [R](https://www.r-project.org/) / [R Studio](https://www.rstudio.com/)
 2. The following R packages installed: metafor, ggplot2, metaSEM, compute.es, MBESS.
-These packages can be 
+These packages can be installed via this line of code:
 
 ```r
 install.packages(c("metafor","ggplot2","metaSEM","compute.es","MBESS"))
