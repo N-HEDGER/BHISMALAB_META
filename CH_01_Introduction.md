@@ -7,16 +7,16 @@ output:
 ![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
 
 
-# Meta analysis in R.
+# Meta-analysis in R.
 
 
-Meta analysis is a technique that allows us to quantitatively combine research knowledge, improve the precision of our parameter estimates and discover insights that would not be revealed from considering individual studies in isolation.
+Meta-analysis is a technique that allows us to quantitatively combine research knowledge, improve the precision of our parameter estimates and discover insights that would not be revealed from considering individual studies in isolation.
 
 People can often balk at the mention of the words "meta-analysis". The words conjure up images of large groups of expert statisticians working long hours on intimidatingly large datasets.
 
-In reality, these are significant and harmful misconceptions. Recently, R and in particular, the 'metafor' package has made conducting meta analysis incredibly straightforward. Moreover, the idea that meta-analyis is a tool that should be restricted to use on large scale datasets is incorrect. Even combining the results of just 2 studies can yield valuable increases in precision.
+In reality, these are significant and harmful misconceptions. Recently, R and in particular, the 'metafor' package has made conducting meta-analysis incredibly straightforward. Moreover, the idea that meta-analyis is a tool that should be restricted to use on large scale datasets is incorrect. Even combining the results of just 2 studies can be extremely valuable.
 
-## Meta analysis - 3 examples.
+## Meta-analysis - 3 examples.
 
 The power of meta analysis is best illustrated with some examples.
 
@@ -24,13 +24,13 @@ The power of meta analysis is best illustrated with some examples.
 ### Example 1: Lucky and Unlucky
 
 
-Lets suppose that we have two studies that are replications of one another. The first study, published by Lucky et al (2012) in Current Biology revealed a large, significant effect (N = 26, p=.0001). The second study, published by Unlucky et al (2015) in a low-impact journal failed to detect a statistically significant effect (N= 28, p=.12). Since Unlucky failed to replicate Luckys finidng in a larger sample, they questioned the existence of the effect. 
+Lets suppose that we have two studies that are replications of one another. The first study, published by Lucky et al (2012) in Current Biology revealed a large, significant effect (N = 26, p=.0001). The second study, published by Unlucky et al (2015) in a low-impact journal failed to detect a statistically significant effect (N= 28, p=.12). Since Unlucky failed to replicate Luckys finding with a larger sample, they questioned the existence of the effect. 
 
-These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should retain the null. Intuitively, we know that we should have more faith on the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we take to the bank.
+These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should retain the null. Intuitively, we know that we should have more faith in the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we take to the bank.
 
-What happens if we perform a meta analysis on the data?
+What happens if we perform a meta-analysis on the data?
 
-The code below will define some utility functions, perform a meta analysis on the two studies, report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
+The code below will define some utility functions, perform a meta-analysis on the two studies, report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
 
 
 ```r
@@ -93,11 +93,11 @@ forest(META,slab=c("Lucky (2012)","Unlucky (2015)"))
 ![](CH_01_Introduction_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 
-The above plot is known as a forest plot. It depicts the effects sizes and confidence intervals for the studies that contribute to our meta analysis. Below the two contributing studies, the meta analytic combination of the effects is depicted by a diamond.
+The above plot is referred to as a *forest plot*. It depicts the effects sizes and confidence intervals for the studies that contribute to our meta-analysis. Below the two contributing studies, the meta analytic combination of the effects is depicted by a diamond.
 
-Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
+Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta-analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
 
-This illustrates one of the main advantages of meta analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta analysis allows us to "*see the wood for the trees*". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't really how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
+This illustrates one of the main advantages of meta-analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta-analysis allows us to "*see the wood for the trees*". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't really how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
 
 
 
