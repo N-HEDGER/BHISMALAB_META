@@ -36,7 +36,7 @@ You can view the first chapter [here](CH_01_Introduction.md). Below is a full in
 | 6 | Moderator analysis | 
 | 7 | Multi-level models |
 
-
+![alt text](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
 
 
 
