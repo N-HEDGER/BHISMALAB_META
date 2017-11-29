@@ -26,11 +26,11 @@ The power of meta analysis is best illustrated with some examples.
 
 Lets suppose that we have two studies that are replications of one another. The first study, published by Lucky et al (2012) in Current Biology revealed a large, significant effect (N = 26, p=.0001). The second study, published by Unlucky et al (2015) in a low-impact journal failed to detect a statistically significant effect (N= 28, p=.12). Since Unlucky failed to replicate Luckys finding with a larger sample, they questioned the existence of the effect. 
 
-These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should retain the null. Intuitively, we know that we should have more faith in the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we take to the bank.
+These results appear to be somewhat in conflict with one another. The first study robustly indicated that we should reject the null hypothesis, whereas the latest evidence suggests that we should retain the null. Intuitively, we know that we should have more faith in the outcome of the study with the larger sample, so maybe Unlucky's conclusion should be the one that we 'take to the bank'.
 
 What happens if we perform a meta-analysis on the data?
 
-The code below will define some utility functions, perform a meta-analysis on the two studies, report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later sections. 
+The code below will define some utility functions, perform a meta-analysis on the two studies, report some information about our meta-analytic model and produce a forest plot. We don't need to understand what all this means just yet, since we will be repeating these steps in more detail in later chapters. 
 
 
 ```r
@@ -95,7 +95,7 @@ forest(META,slab=c("Lucky (2012)","Unlucky (2015)"))
 
 The above plot is referred to as a *forest plot*. It depicts the effects sizes and confidence intervals for the studies that contribute to our meta-analysis. Below the two contributing studies, the meta analytic combination of the effects is depicted by a diamond.
 
-Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta-analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
+Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However, both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta-analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
 
 This illustrates one of the main advantages of meta-analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta-analysis allows us to "*see the wood for the trees*". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't really how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
 
@@ -104,11 +104,11 @@ This illustrates one of the main advantages of meta-analysis - if we had conside
 ### Example 2: A miraculous replication
 
 
-In 2001, a group of researchers found that a new treatment was effective at reducing depression (N=26, p=.049). 
+In 2001, a group of researchers found that a new drug treatment was effective at reducing depression (N=26, p=.049). 
 
 Unfortunately the authors only had access to a small sample and so the confidence interval around their effect size estimate was very large.
 
-In 2008 they managed to perform a replication study with an independent sample of participants . Miraculously, they found that the effect was identical in magnitude! (N=26, p=.049). In 2011, they replicated the study and again found exactly the same effect! (N=26, p=.049).
+In 2008 they managed to perform a replication study with an independent sample of participants . Miraculously, they found that the effect was identical in magnitude! (N=26, p = .049). In 2011, they replicated the study and again found exactly the same effect! (N=26, p =.049).
 
 The code below will fit a meta-analytic model to these studies and plot a slightly adapted version of a forest plot, which will be described below.
 
@@ -191,7 +191,7 @@ tidy(META3)
 ```
 
 
-The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. Some studies seem to indicate fairly large effects, others fairly small effects. 
+The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. Some studies seem to indicate fairly large effects and others indicate fairly small effects. 
 
 Later, after inspecting the papers more closely, we realise that studies 1-5 used fearful faces as threat stimuli and studies 6-10 used angry faces. In order to determine whether the choice of stimulus explains this heterogeneity, we perform a *moderator analysis* 
 
@@ -210,7 +210,7 @@ forest(META3_MOD)
 
 ![](CH_01_Introduction_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-In the above forest plot we see our data, with an underlayed grey diamond. The grey diamond under the first 5 effects indicates the overall effect of fearful faces. The grey diamond under the effects 6-10 indicates the overall effect of angry faces. This plot seems pretty ugly to me, so lets make our own, prettier plot using ggplot2.
+In the above forest plot we see the effect sizes and confidence intervals, with an underlaid grey diamond. The grey diamond under the first 5 effects indicates the overall effect of fearful faces. The grey diamond under the effects 6-10 indicates the overall effect of angry faces. This plot seems pretty ugly to me, so lets make our own, prettier plot using ggplot2.
 
 
 ```r
@@ -308,8 +308,20 @@ META3_MOD2
 
 Here we see that a robust effect has been detected for fear faces (d = 0.56, p<.0001), whereas angry faces do not yield detectable effects (d = 0.11, p=.104). In some ways, it seems as though we were initially combining 'apples and oranges' into the same analysis.
 
-This example illustrates another important application of meta analysis - here we have answered a novel research question that was never addressed by any of these individual studies. Specifically, all studies employed only 1 stimulus type and so did not address the question of whether fear faces yielded larger effects than angry faces. However, we have been able to answer this question with a secondary analyis of existing data.
+This example illustrates another important application of meta analysis - here we have answered a novel research question that was never addressed by any of these individual studies. Specifically, all studies employed just one stimulus type and so did not address the question of whether fear faces yielded larger effects than angry faces. However, we have been able to answer this question with a secondary analyis of the existing data.
 
 We can extend this process of moderator analysis to define arbitrarily complex models, including multiple factors and their interactions, so we can optimally explain the differences in effect size estimates emanating from a set of studies. 
 
 
+## Summary.
+
+In this chapter, we have been on a whirlwind tour of some of the main functions of meta-analysis. We have found that:
+
+1) Meta-analysis allows us to quantitiatively combine research knowledge. It makes us better able to 'see the wood for the trees' and it allows us to make more informed decisions (example 1).
+2) Meta-analysis allows us to improve the precision of the effect we are estimating and affords us greater statistical power (example 2).
+3) Meta-analysis allows us to fit linear models that can explain differences in the effect sizes (example 3).
+
+Now though, it is time to slow things down a little. In the next chapter, we will walk through the nuts and bolts of interrogating published papers and preparing effect size estimates for meta analysis. This is what we will cover in the [next chapter](CH_02_Gathering_data.md).
+
+
+![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
