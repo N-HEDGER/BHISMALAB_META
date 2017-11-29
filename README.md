@@ -18,7 +18,7 @@ These packages can be installed via this line of code:
 install.packages(c("metafor","ggplot2","metaSEM","compute.es","MBESS"))
 ```
 
-Note that this is not a guide on how to use R itself. There are very many [excellent guides] (https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) freely available to get you up and running with this. There is no requirement to be an 'expert' in R - you only need to understand the very basics (data frames, functions). 
+Note that this is not a guide on how to use R itself. There are very many [excellent guides](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) freely available to get you up and running with this. There is no requirement to be an 'expert' in R - you only need to understand the very basics (data frames, functions). 
 
 ## Approach
 
