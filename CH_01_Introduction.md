@@ -95,13 +95,13 @@ forest(META,slab=c("Lucky (2012)","Unlucky (2015)"))
 
 The above plot is referred to as a *forest plot*. It depicts the effects sizes and confidence intervals for the studies that contribute to our meta-analysis. Below the two contributing studies, the meta analytic combination of the effects is depicted by a diamond.
 
-Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively. However, both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta-analytic combination of effects has detected a significant effect. Perhaps there was not much of a conflict after all.
+Here, we see that Lucky and Unlucky rejected and retained the null hypothesis respectively - the confidence interval for Lucky does not pass through zero, whereas the confidence interval for Unlucky does. However, both effects are in the same direction and the confidence intervals overlap. Importantly, the model output has told us that the meta-analytic combination of effects has detected a significant effect (p = .049). Perhaps there was not much of a conflict after all.
 
 This illustrates one of the main advantages of meta-analysis - if we had considered the results of the individual studies alone, we would be left with a seemingly incoherent picture. Meta-analysis allows us to "*see the wood for the trees*". The findings only appear inconsistent to the extent that they are treated as individual entities. This isn't really how science should work. We should apply techniques to quantitatively combine research findings. This is the job of meta analysis. 
 
 
 
-### Example 2: A miraculous replication
+### Example 2: A Miraculous Replication
 
 
 In 2001, a group of researchers found that a new drug treatment was effective at reducing depression (N=26, p=.049). 
@@ -147,7 +147,7 @@ The above plot is another forest plot, but this time it shows the effect of fitt
 
 We see that from study 1 to study 3, our combined confidence interval width has reduced from 0.8 to 0.47. This is an incredibly valuable increase in precision. Moreover, the pooled p value has reduced substantially from 0.49 to .0006. 
 
-The take home message here is that meta analysis greatly improves the precision of our parameter estimates. The example also illustrates that several studies indicating weak evidence for an effect, when combined, can indicate very strong evidence of an effect.
+The take home message here is that meta analysis greatly improves the precision of our parameter estimates. The example also illustrates an increase in statistical power - several studies indicating weak evidence for an effect, when combined, can indicate very strong evidence of an effect.
 
 
 
@@ -157,6 +157,7 @@ Lets suppose that we are performing a meta analysis on 10 studies that investiga
 
 
 ```r
+# Create studies 1-10.
 Study1=ptoDr(.049,26,0.5)
 Study2=ptoDr(.01,20,0.5)
 Study3=ptoDr(.049,21,0.5)
@@ -168,10 +169,12 @@ Study8=ptoDr(.10,26,0.5)
 Study9=ptoDr(.9,29,0.5)
 Study10=ptoDr(.6,70,0.5)
 
+# Add to data frame
 DATA3=data.frame(rbind(Study1,Study2,Study3,Study4,Study5,Study6,Study7,Study8,Study9,Study10))
 
 colnames(DATA3)=c("D","SE")
 
+# Fit model.
 META3=rma(yi=D,sei=SE,data=DATA3)
 
 forest(META3)
@@ -180,6 +183,7 @@ forest(META3)
 ![](CH_01_Introduction_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ```r
+# Spit out important information.
 tidy(META3)
 ```
 
@@ -191,7 +195,7 @@ tidy(META3)
 ```
 
 
-The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. Some studies seem to indicate fairly large effects and others indicate fairly small effects. 
+The outcome of the meta analysis indicates a modest and significant overall effect. Just by eyeballing the figure though, we can see that there is substantial heterogeneity between the contributing effect sizes. Some studies (1-5) seem to indicate fairly large effects and others (6-10) indicate fairly small effects. 
 
 Later, after inspecting the papers more closely, we realise that studies 1-5 used fearful faces as threat stimuli and studies 6-10 used angry faces. In order to determine whether the choice of stimulus explains this heterogeneity, we perform a *moderator analysis* 
 
@@ -210,7 +214,7 @@ forest(META3_MOD)
 
 ![](CH_01_Introduction_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-In the above forest plot we see the effect sizes and confidence intervals, with an underlaid grey diamond. The grey diamond under the first 5 effects indicates the overall effect of fearful faces. The grey diamond under the effects 6-10 indicates the overall effect of angry faces. This plot seems pretty ugly to me, so lets make our own, prettier plot using ggplot2.
+In the above forest plot we see the effect sizes and confidence intervals, with an underlaid grey diamond. The grey diamond under the first 5 effects indicates the overall effect of fearful faces. The grey diamond under the effects 6-10 indicates the overall effect of angry faces. This plot seems pretty ugly to me, so lets make our own, prettier plot using the ggplot2 library.
 
 
 ```r
@@ -308,7 +312,7 @@ META3_MOD2
 
 Here we see that a robust effect has been detected for fear faces (d = 0.56, p<.0001), whereas angry faces do not yield detectable effects (d = 0.11, p=.104). In some ways, it seems as though we were initially combining 'apples and oranges' into the same analysis.
 
-This example illustrates another important application of meta analysis - here we have answered a novel research question that was never addressed by any of these individual studies. Specifically, all studies employed just one stimulus type and so did not address the question of whether fear faces yielded larger effects than angry faces. However, we have been able to answer this question with a secondary analyis of the existing data.
+This example illustrates another important application of meta analysis - here we have answered a novel research question that was never addressed by any of these individual studies. Specifically, all studies employed just one stimulus type and so did not address the question of whether fear faces yielded larger effects than angry faces. However, we have been able to answer this novel question with a secondary analyis of the existing data.
 
 We can extend this process of moderator analysis to define arbitrarily complex models, including multiple factors and their interactions, so we can optimally explain the differences in effect size estimates emanating from a set of studies. 
 
@@ -319,9 +323,9 @@ In this chapter, we have been on a whirlwind tour of some of the main functions 
 
 1) Meta-analysis allows us to quantitiatively combine research knowledge. It makes us better able to 'see the wood for the trees' and it allows us to make more informed decisions (example 1).
 2) Meta-analysis allows us to improve the precision of the effect we are estimating and affords us greater statistical power (example 2).
-3) Meta-analysis allows us to fit linear models that can explain differences in the effect sizes (example 3).
+3) Meta-analysis allows us to fit linear models that can explain differences between effect sizes (example 3).
 
-Now though, it is time to slow things down a little. In the next chapter, we will walk through the nuts and bolts of interrogating published papers and preparing effect size estimates for meta analysis. This is what we will cover in the [next chapter](CH_02_Gathering_data.md).
+Now though, it is time to slow things down a little and return to basics. In the [next chapter](CH_02_Gathering_data.md), we will walk through the nuts and bolts of interrogating published papers and preparing effect size estimates for meta analysis. 
 
 
 ![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
