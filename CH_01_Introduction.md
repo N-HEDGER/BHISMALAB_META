@@ -7,7 +7,7 @@ output:
 ![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
 
 
-# Meta-analysis in R.
+# Chapter 1: Introduction
 
 
 Meta-analysis is a technique that allows us to quantitatively combine research knowledge, improve the precision of our parameter estimates and discover insights that would not be revealed from considering individual studies in isolation.
