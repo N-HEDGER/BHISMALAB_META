@@ -123,7 +123,6 @@ result3
 
 ```
 
-
 Great, now lets define this as our first effect size to be included in our model.
 
 ```{r}
