@@ -195,7 +195,7 @@ result2=ptoDr(0.49,20,0.5)
 
 
 
-<iframe src="https://nhedger.shinyapps.io/Metatwo/" style="border: none; width: 440px; height: 900px"></iframe>
+<iframe src=https://nhedger.shinyapps.io/Metatwo/ style="border: none; width: 440px; height: 900px"></iframe>
 
 
 
