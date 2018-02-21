@@ -52,7 +52,10 @@ It **will not do** to simply report that you 'calculated Cohen's d', since, as w
 In the repeated measures design, it is often desirable to use the *standard deviation of the difference scores* (option 3 described above) as the standardiser, creating a statistic often referred to as 'Cohens dz'. This is because the information most reliably reported in experimental papers tends to be a t, or p statistic - and dz can be easily calculated from just the t/p and N. By contrast, you are less likely to find tables of means and standard deviations in every paper - which makes options 1, 2 and 4 less reliable. Of course, you may want to root through your candidate set of papers and base your choice of standardiser on what information is most frequently reported. 
 
 
-## Example 1: dz from t or p value. 
+## Scenario 1: dz from t or p value and N. 
+
+In this first scenario, we will be computing dz from the p or t value and N. This is the best case scenario, where everything we need is reported.  
+
 First, let's make up some example repeated measures data.
 ```{r}
 # Import metafor library
@@ -74,9 +77,9 @@ test
 
 ```
 
-In a published paper, this would typically be written as: "A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002"
+In a published paper, this would typically be written as: "A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002".
 
-Now lets define a function for computing Cohen's dz, based on the t value and p value. We will also define a function that computes dz based on the mean differences and SD of the difference scores, so you can convince yourself that all methods return the same results. Each function returns [1] dz, [2] the standard error of dz, [3] the lower bound of the confidence interval and [4] the upper bound of the confidence interval.
+Now let's define a function for computing Cohen's dz, based on the t value and p value. We will also define a function that computes dz based on the mean differences and SD of the difference scores, so you can convince yourself that all methods return the same results. Each function returns [1] dz, [2] the standard error of dz, [3] the lower bound of the confidence interval and [4] the upper bound of the confidence interval.
 
 ```{r}
 # Method 1: Define a function for converting from p value and N to Cohen's dz and 95% CI's
@@ -128,5 +131,162 @@ Great, now lets define this as our first effect size to be included in our model
 ```{r}
 Effect1=result1
 ```
+
+## Scenario 2: No exact p value is reported.
+
+In this next scenario, we are faced with a very common problem, which is that the author has reported that an effect was 'significant', but has not reported the exact p value. For instance: 
+
+"A paired t-test detected significantly higher scores in condition 1 than condition N =50 p<.050".
+
+I am not aware of any formal convention for how to approach this scenario, but if in doubt, I think that the best strategy is to be conservative. Of course, the most conservative possible interpretation of p<.050 is that p =.049 and so this should form the basis of our effect size calculation.
+
+
+```{r}
+result2=ptoDr(0.49,20,0.5)
+```
+
+
+## Scenario 3: A 'non significant' effect
+
+
+```{r,echo=FALSE}
+
+
+library(shiny)
+library(ggplot2)
+library(metafor)
+
+
+old_theme1 <- theme_bw()
+
+
+shinyServer(function(input, output) {  
+  
+  dataset <- function() {
+    data.frame(cbind(c(input$Mean1,input$Mean2),c(input$SE1,input$SE2),c(input$Mean1+(1.96*input$SE1),input$Mean2+(1.96*input$SE2)),c(input$Mean1-(1.96*input$SE1),input$Mean2-(1.96*input$SE2)),c(2,1)))
+    
+  }
+  
+  
+  MOD=function(){
+    t=dataset()
+    t=data.frame(t)
+    colnames(t)=c("a","b")
+    d=rma(yi=a,sei=b,data=t)
+    return(d)
+  }
+    
+  
+#   MOD=function(){
+#   t=data.frame(cbind(c(input$Mean1,input$Mean2),c(input$SE1,input$SE2),c(input$Mean1+(1.96*input$SE1),input$Mean2+(1.96*input$SE1)),c(input$Mean1-(1.96*input$SE1),input$Mean2-(1.96*input$SE1)),1:2))
+#   j=rma(t,yi=X1,sei=X2)
+#   return(j)
+#   }
+  
+   output$plot <- renderPlot({
+     
+     if (input$showoutcome)
+     x=ggplot(dataset(), aes(X5,X1)) +geom_point(size=4)+geom_point(aes(x=0),y=as.numeric(MOD()$b),size=9,colour="red",shape=23,fill="red")  +geom_errorbar(aes(ymin=X3, ymax=X4))+geom_errorbar(aes(x=0),ymin=MOD()$ci.lb, ymax=MOD()$ci.ub,colour="red") + geom_hline(aes(yintercept=0),linetype="dashed")+coord_flip()+ylab("Cohen's d")+xlab("Study")+
+       scale_y_continuous(limits=c(-3,3),breaks=seq(-3,3,0.5))+scale_x_discrete(limits=c("","",""))
+else
+  
+  x=ggplot(dataset(), aes(X5,X1)) +geom_point(size=4)+geom_point(aes(x=0),y=as.numeric(MOD()$b),size=9,colour="white",shape=23,fill="white")  +geom_errorbar(aes(ymin=X3, ymax=X4))+geom_errorbar(aes(x=0),ymin=MOD()$ci.lb, ymax=MOD()$ci.ub,colour="white") + geom_hline(aes(yintercept=0),linetype="dashed")+coord_flip()+ylab("Cohen's d")+xlab("Study")+
+       scale_y_continuous(limits=c(-3,3),breaks=seq(-3,3,0.5))+scale_x_discrete(limits=c("","",""))
+  
+     print(x)})
+     
+     
+#     if (input$bivariate)
+#       p=qplot(rnorm(input$sampleSize,0,1),rnorm(input$sampleSize,0,1))+scale_x_continuous(limits=c(-4,4),breaks=seq(-4,4,1))+scale_y_continuous(limits=c(-4,4),breaks=seq(-4,4,1))
+#     print(p)
+#   },height=300,width=300)
+#   
+  
+  
+  
+  
+  output$text1 <- renderText({ 
+  
+#         MOD=rma(yi=X1,sei=X2,data=dataset())
+    if (input$showoutcome)    
+    paste("The random effects model indicates pooled effect size is", MOD()$b)
+    
+  })
+     output$text2 <- renderText({ 
+#         MOD=rma(yi=X1,sei=X2,data=dataset())
+       if (input$showoutcome)        
+       paste("The 95% confidence interval ranges from",
+             MOD()$ci.lb, "to", MOD()$ci.ub)
+     
+   })
+#   
+   output$text3 <- renderText({ 
+     if (input$showoutcome)
+    paste("The probability of obtaining the results under the null hypothesis is", MOD()$pval)
+#     
+   })
+  
+  
+})
+
+
+
+
+library(shiny)
+library(ggplot2)
+library(metafor)
+
+shinyUI(pageWithSidebar(
+  
+  headerPanel("Meta two"),
+  sidebarPanel(
+    helpText("Use the sliders to vary the effect size and standard error of two studies."),
+    br(),
+    br(),
+    helpText("Enter the effect size for study 1."),
+    sliderInput('Mean1', 'Effect size 1', min=-1.5, max=1.5,
+                value=-0.5,step=0.1),
+    
+    helpText("Enter the standard error for study 1."),
+    
+    sliderInput('SE1', 'Standard Error 1', min=0.05, max=0.5,
+                value=0.2,step=0.01),
+    
+    helpText("Enter the effect size for study 2."),
+    
+    sliderInput('Mean2', 'Effect size 2', min=-1.5, max=1.5,
+                value=1,step=0.1),
+    
+    helpText("Enter the standard error for study 2."),
+    
+    sliderInput('SE2', 'Standard Error 2', min=0.05, max=0.5,
+                value=0.2,step=0.01),
+  
+  
+    br(),
+    br(),
+    br(),
+    br(),
+  checkboxInput('showoutcome', 'Show Outcome?',TRUE),
+    
+  helpText("Turn this on and off to display the outcome of the meta analysis")),
+  
+  mainPanel(
+    h1("Meta analysis for two studies"),
+    helpText("This excercise will allow you to observe how the magnitude and precision of two studies relate to the pooled effect size computed via meta-analysis (in red)"),
+    br(),
+    helpText("Use the checkbox to turn the outcome on and off. See if you can estimate the magnitude and precision of the pooled effect based on your input"),
+     plotOutput('plot'),
+     br(),
+    textOutput('text1'),
+     br(),
+     textOutput('text2'),
+      br(),
+      textOutput('text3')
+  )))
+
+
+```
+
 
 
