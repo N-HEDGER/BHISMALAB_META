@@ -7,11 +7,11 @@ output:
 ![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
 
 
-## Creating a datset.
+## Creating a dataset.
 
+In this chapter, we will focus on the nuts and bolts of computing effect sizes for meta analyses. In my opinion, this is a topic that is not given the attention it deserves in meta-analysis textbooks. Empirical papers can vary wildly in terms of the information that they report and so a number of strategies can be required to estimate an effect size.
 
-
-In this chapter, we will focus on the nuts and bolts of gathering data for meta analyses.  Empirical papers can vary wildly in terms of the information that they report and so a number of strategies can be needed to estimate an effect size.
+## Cohen's d
 
 This chapter will focus soley on Cohen's d, since it is by far the most commonly used effect size. In principle though, the steps we follow will be more or less the same regardless of the effect size we wish to compute.
 
@@ -19,22 +19,40 @@ Cohen's d actually can actually be defined in a number of ways, but the Generic 
 
 (Mean 1 - Mean 2)/ SD
 
-Cohens d therefore represents the difference between two means in standard deviation units. The denominator of the equation is ambiguous - a standard deviation is referred to - but there are actually a number of possibilities here. We could use:
+Cohens d therefore represents the difference between two means in standard deviation units. You can find an interactive visualisation of Cohen's d and its relationship with other metrics [here](http://rpsychologist.com/d3/cohend/).
+
+## Standardisers for d
+
+The denominator of the equation (SD) as I have presented it above is ambiguous - a standard deviation is referred to - but there are actually a number of possible standard deviations I could be refering to. We could use:
 
 1. The SD of Group/Condition 1
 2. The SD of Group/Condition 2
 3. The SD of the difference between Group/Condition 1 and Group/Condition 2.
 4. The pooled SD of Group/Condition 1 and Group/Condition 2.
 
-In fact, these are all legitimate options. The consequences of using each standardiser can be a complex issue and this is described excellently in [This](https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00863/full) paper by Lakens (2013). In reality, we only need to ensure that we:
+In fact, these are all perfectly legitimate options. The consequences of using each standardiser can be a complex issue and this is all described excellently in [This](https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00863/full) paper by Lakens (2013).
+
+In practice, all we really need to ensure is that we:
 
 1. Compute the mean difference standardised by some standard deviation.
 2. Are clear about which standardiser we used.
 3. Are consistent in using the same standardiser for each effect in our analysis.
 
-Therefore *clarity* and *consistency* is key. It **will not do** to simply report that you 'calculated Cohen's d', since d can be defined and operationalized in a number of different ways.
+Therefore *clarity* and *consistency* are much more important than the specific choice of standardiser itself.
 
-In the repeated measures design, it is often desirable to use the *standard deviation of the difference scores* (option 3 described above) as the standardiser, creating a statistic often referred to as 'Cohens dz'. The reason for this is that the information most reliably reported in papers tends to be a t, or p statistic - and dz can be easily calculated from just the t/p and N. By contrast, you are less likely to find tables of means and standard deviations in every paper - this makes options 1, 2 and 4 less reliable. 
+If we are *consistent*, then all of our effect sizes will be comparable to one another.
+If we are *clear* then this will allow researchers to interpret our results correctly and make any conversions to other forms of Cohen's d, if they want to compare the results to previously published papers.
+
+It **will not do** to simply report that you 'calculated Cohen's d', since, as we have seen, d can be defined and operationalized in a number of different ways.
+
+## Cohen's dz
+
+In the repeated measures design, it is often desirable to use the *standard deviation of the difference scores* (option 3 described above) as the standardiser, creating a statistic often referred to as 'Cohens dz'. This is because the information most reliably reported in experimental papers tends to be a t, or p statistic - and dz can be easily calculated from just the t/p and N. By contrast, you are less likely to find tables of means and standard deviations in every paper - which makes options 1, 2 and 4 less reliable. Of course, you may want to root through your candidate set of papers and base your choice of standardiser on what information is most frequently reported. 
+
+
+## Scenario 1: dz from t or p value and N. 
+
+In this first scenario, we will be computing dz from the p or t value and N. This is the best case scenario, where everything we need is reported.  
 
 First, let's make up some example repeated measures data.
 
@@ -83,9 +101,9 @@ test
 ##                5.981076
 ```
 
-In a published paper, this would typically be written as: "A paired t-test detected significantly larger values in condition 1 than condition 2 (t(19) = 3.54, p=.002"
+In a published paper, this would typically be written as: "A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002".
 
-Now lets define a function for computing Cohen's d, based on the t value and p value. We will also define a function that computes dz based on the mean differences and SD of the difference scores, so you can convince yourself that all methods return the same results. Each function returns [1] dz, [2] the standard error of dz, [3] the lower bound of the confidence interval and [4] the upper bound of the confidence interval.
+Now let's define a function for computing Cohen's dz, based on the t value and p value. We will also define a function that computes dz based on the mean differences and SD of the difference scores, so you can convince yourself that all methods return the same results. Each function returns [1] dz, [2] the standard error of dz, [3] the lower bound of the confidence interval and [4] the upper bound of the confidence interval.
 
 
 ```r
@@ -126,7 +144,59 @@ DSE=c(D,SE,CIn,CIp)}
 result1=ptoDr(test$p.value,20,0.5)
 result2=TtoDr(as.numeric(test$statistic),20,0.5)
 result3=CtoD(Condition1,Condition2)
+
+result1
 ```
+
+```
+## [1] 0.7931954 0.2563766 0.2906972 1.2956936
+```
+
+```r
+result2
+```
+
+```
+## [1] 0.7931954 0.2563766 0.2906972 1.2956936
+```
+
+```r
+result3
+```
+
+```
+## [1] 0.7931954 0.2563766 0.2906972 1.2956936
+```
+
+Great, now lets define this as our first effect size to be included in our model.
+
+
+```r
+Effect1=result1
+```
+
+## Scenario 2: No exact p value is reported.
+
+In this next scenario, we are faced with a very common problem, which is that the author has reported that an effect was 'significant', but has not reported the exact p value. For instance: 
+
+"A paired t-test detected significantly higher scores in condition 1 than condition N =50 p<.050".
+
+I am not aware of any formal convention for how to approach this scenario, but if in doubt, I think that the best strategy is to be conservative. Of course, the most conservative possible interpretation of p<.050 is that p =.049 and so this should form the basis of our effect size calculation.
+
+
+
+```r
+result2=ptoDr(0.49,20,0.5)
+```
+
+
+## Scenario 3: A 'non significant' effect
+
+
+
+
+<iframe src="https://nhedger.shinyapps.io/Metatwo/" style="border: none; width: 440px; height: 900px"></iframe>
+
 
 
 
