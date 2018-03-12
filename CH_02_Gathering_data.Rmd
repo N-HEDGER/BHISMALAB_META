@@ -13,17 +13,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this chapter, we will focus on the nuts and bolts of obtaining effect sizes for meta analyses. This won't focus so much on formulas or calculations, but the practical issues associated with estimating effect sizes from the information we have available. Anyone can follow a formula, but a formula alone is just a mechanical rule that doesn't tell you anything about the context in which it should be applied. Unfortunately, empirical papers can vary wildly in terms of the information that they report and so a number of strategies can be required to estimate an effect size. In my opinion, meta analysis/effect size textbooks have too much emphasis on formulas and not enough on the difficulties associated with trying to extract useful information from empirical papers.
 
-## Cohen's d
+## Cohen's *d*
 
 This chapter will focus soley on Cohen's *d*, since it is by far the most commonly used effect size. In principle though, the lessons learned will be the same regardless of the effect size we wish to compute.
 
-Cohen's d actually can actually be defined in a number of ways, but the Generic formula is:
+Cohen's *d* actually can actually be defined in a number of ways, but the Generic formula is:
 
 (*M1* - *M2*)/ *SD*
 
 Cohens *d* therefore represents the difference between two means in standard deviation units. You can find an interactive visualisation of Cohen's *d* and its relationship with other metrics [here](http://rpsychologist.com/d3/cohend/).
 
-## Standardisers for d
+## Standardisers for *d*
 
 The denominator of the equation (*SD*) as I have presented it above is ambiguous - a standard deviation is referred to - but there are actually a number of possible standard deviations I could be refering to. We could use:
 
@@ -49,7 +49,7 @@ It **will not do** to simply report that you 'calculated Cohen's *d*', since, as
 
 ***
 
-## Cohen's dz
+## Cohen's *dz*
 
 In the repeated measures design, it is often desirable to use the *standard deviation of the difference scores* (option 3 described above) as the standardiser, creating a statistic often referred to as 'Cohens *dz*'. This is because the information most reliably reported in experimental papers tends to be a *t*, or *p* statistic - and *dz* can be easily calculated from just the *t/p* and *N*. By contrast, you are less likely to find tables of means and standard deviations in every paper - which makes options 1, 2 and 4 less reliable. Of course, you may want to root through your candidate set of papers and base your choice of standardiser on what information is most frequently reported. 
 
@@ -84,7 +84,7 @@ test
 In a published paper, this would typically be written as:
 
 
-*"A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002".*
+*"A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002)".*
 
 
 Now let's define some functions for computing Cohen's *dz*, based on the *t* value and *p* value. We will also define a function that computes dz based on the mean differences and SD of the difference scores so you can convince yourself that all methods return the same results.
@@ -193,13 +193,13 @@ In scenarios 2-4, we have described cases where we are *estimating* an effect si
 
 2. *Be clear about your intentions* - State who you are, where you are from, that you are collecting data for a meta analysis and what your outcome measure is.
 
-3. *Be polite* - Academics lead busy lives. It's not always straightforward to retrieve specific data and send it in a comprehensible format, particularly if it was collected several years ago. You are asking for someone you may not know to do you a favour and so your email should be written accordingly.
+3. *Be polite* - Academics lead busy lives. It's not always straightforward to retrieve specific data and send it in a comprehensible format, particularly if it was collected several years ago. You are asking for someone you may not know to do you a favour - and so your email should be written accordingly.
 
 4. *Try again* - If you are unsuccessful the first time you ask for data, wait a suitable period of time (2 weeks) and then send a reminder. Following two unsuccessful attempts, it is probably time to move on.  
 
 ### Should I ask for unpublished data?
 
-Im a little skeptical about this myself, but I am not going to give a 'yes' or 'no' answer to this complex issue. Here are couple of things to consider at least.
+I'm a little skeptical about this myself, but I am not going to give a 'yes' or 'no' answer to this complex issue. Here are couple of things to consider at least.
 
 1. *Who do you ask?* - Often in meta-analyses, it is reported that 'established authors' were contacted for unpublished data. There is some inherent subjectivity involved here in what constitutes an 'established author'. All this really amounts to is biasing the sample of effect sizes towards particular labs with strong publication records.
 

@@ -131,14 +131,14 @@ $(document).ready(function () {
 <p>In this chapter, we will focus on the nuts and bolts of obtaining effect sizes for meta analyses. This won’t focus so much on formulas or calculations, but the practical issues associated with estimating effect sizes from the information we have available. Anyone can follow a formula, but a formula alone is just a mechanical rule that doesn’t tell you anything about the context in which it should be applied. Unfortunately, empirical papers can vary wildly in terms of the information that they report and so a number of strategies can be required to estimate an effect size. In my opinion, meta analysis/effect size textbooks have too much emphasis on formulas and not enough on the difficulties associated with trying to extract useful information from empirical papers.</p>
 </div>
 <div id="cohens-d" class="section level2">
-<h2>Cohen’s d</h2>
+<h2>Cohen’s <em>d</em></h2>
 <p>This chapter will focus soley on Cohen’s <em>d</em>, since it is by far the most commonly used effect size. In principle though, the lessons learned will be the same regardless of the effect size we wish to compute.</p>
-<p>Cohen’s d actually can actually be defined in a number of ways, but the Generic formula is:</p>
+<p>Cohen’s <em>d</em> actually can actually be defined in a number of ways, but the Generic formula is:</p>
 <p>(<em>M1</em> - <em>M2</em>)/ <em>SD</em></p>
 <p>Cohens <em>d</em> therefore represents the difference between two means in standard deviation units. You can find an interactive visualisation of Cohen’s <em>d</em> and its relationship with other metrics <a href="http://rpsychologist.com/d3/cohend/">here</a>.</p>
 </div>
 <div id="standardisers-for-d" class="section level2">
-<h2>Standardisers for d</h2>
+<h2>Standardisers for <em>d</em></h2>
 <p>The denominator of the equation (<em>SD</em>) as I have presented it above is ambiguous - a standard deviation is referred to - but there are actually a number of possible standard deviations I could be refering to. We could use:</p>
 <ol style="list-style-type: decimal">
 <li>The <em>SD</em> of Group/Condition 1</li>
@@ -159,7 +159,7 @@ $(document).ready(function () {
 <hr />
 </div>
 <div id="cohens-dz" class="section level2">
-<h2>Cohen’s dz</h2>
+<h2>Cohen’s <em>dz</em></h2>
 <p>In the repeated measures design, it is often desirable to use the <em>standard deviation of the difference scores</em> (option 3 described above) as the standardiser, creating a statistic often referred to as ‘Cohens <em>dz</em>’. This is because the information most reliably reported in experimental papers tends to be a <em>t</em>, or <em>p</em> statistic - and <em>dz</em> can be easily calculated from just the <em>t/p</em> and <em>N</em>. By contrast, you are less likely to find tables of means and standard deviations in every paper - which makes options 1, 2 and 4 less reliable. Of course, you may want to root through your candidate set of papers and base your choice of standardiser on what information is most frequently reported.</p>
 <hr />
 </div>
@@ -194,7 +194,7 @@ test=t.test(Condition1,Condition2,paired=TRUE)</code></pre>
 ## mean of the differences 
 ##                5.981076</code></pre>
 <p>In a published paper, this would typically be written as:</p>
-<p><em>“A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002”.</em></p>
+<p><em>“A paired t-test detected significantly higher scores in condition 1 than condition 2 (t(19) = 3.54, p=.002)”.</em></p>
 <p>Now let’s define some functions for computing Cohen’s <em>dz</em>, based on the <em>t</em> value and <em>p</em> value. We will also define a function that computes dz based on the mean differences and SD of the difference scores so you can convince yourself that all methods return the same results.</p>
 <p>Each function returns [1] dz, [2] the standard error of dz, [3] the lower bound of the confidence interval and [4] the upper bound of the confidence interval.</p>
 <pre class="r"><code># Method 1: Define a function for converting from p value and N to Cohen's dz and 95% CI's
@@ -277,13 +277,13 @@ result1</code></pre>
 <ol style="list-style-type: decimal">
 <li><p><em>Be specific</em> - Be very clear about what data you are asking for. Refer directly to the relevant pages of the paper and/or figures. Without being specific, you run the risk of recieving a large spreadsheet containing all the experimental data. This will then require further clarification and the dialogue will continue for much longer than it needs to.</p></li>
 <li><p><em>Be clear about your intentions</em> - State who you are, where you are from, that you are collecting data for a meta analysis and what your outcome measure is.</p></li>
-<li><p><em>Be polite</em> - Academics lead busy lives. It’s not always straightforward to retrieve specific data and send it in a comprehensible format, particularly if it was collected several years ago. You are asking for someone you may not know to do you a favour and so your email should be written accordingly.</p></li>
+<li><p><em>Be polite</em> - Academics lead busy lives. It’s not always straightforward to retrieve specific data and send it in a comprehensible format, particularly if it was collected several years ago. You are asking for someone you may not know to do you a favour - and so your email should be written accordingly.</p></li>
 <li><p><em>Try again</em> - If you are unsuccessful the first time you ask for data, wait a suitable period of time (2 weeks) and then send a reminder. Following two unsuccessful attempts, it is probably time to move on.</p></li>
 </ol>
 </div>
 <div id="should-i-ask-for-unpublished-data" class="section level3">
 <h3>Should I ask for unpublished data?</h3>
-<p>Im a little skeptical about this myself, but I am not going to give a ‘yes’ or ‘no’ answer to this complex issue. Here are couple of things to consider at least.</p>
+<p>I’m a little skeptical about this myself, but I am not going to give a ‘yes’ or ‘no’ answer to this complex issue. Here are couple of things to consider at least.</p>
 <ol style="list-style-type: decimal">
 <li><p><em>Who do you ask?</em> - Often in meta-analyses, it is reported that ‘established authors’ were contacted for unpublished data. There is some inherent subjectivity involved here in what constitutes an ‘established author’. All this really amounts to is biasing the sample of effect sizes towards particular labs with strong publication records.</p></li>
 <li><p><em>How do you assess the quality of unpublished data?</em> - There may well be a very good reason why the data were never published. With unpublished data we don’t have the benefit that the data were peer reviewed - so there is difficulty with quality control. Moreover, in many cases we probably don’t have a manuscript to accompany the data, so we often can’t meaningfully assess the quality of the data/ experiment ourselves anyway.</p></li>
