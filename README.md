@@ -31,7 +31,7 @@ You can view the first chapter [here](CH_01_Introduction.md). Below is a full in
 | Chapter | Title |
 | --- | --- |
 | 1 | [Introduction](CH_01_Introduction.md) | 
-| 2 | Gathering data from papers | 
+| 2 | [Gathering Data](CH_02_Gathering_data.md) | 
 | 3 | Creating and interacting with model objects |
 | 4 | Testing the robustness of models |
 | 5 | Publication bias |
