@@ -1,0 +1,74 @@
+---
+title: "CH_03_Creating_and_interacting_with_model_objects"
+output: 
+  html_document: 
+    keep_md: yes
+---
+![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/Users/nicholashedger/Documents/BHISMALAB_META")
+
+```
+
+## Creating and interacting with model objects.
+
+This chapter will provide details on how to fit and interact with model objects using R. The metafor package ensures that this is extremely user friendly and straightforward. 
+
+## Data format
+
+At a minimum, metafor requires a dataframe that specifies the effect sizes and some measure of their variance.
+
+First, we define a function for computing our effect sizes.
+```{r}
+ptoD=function(p,N)
+{T=qt(p/2,N-1)
+D=T/sqrt(N)
+Da=D*sqrt(2*(1-0.5))
+Da2=sqrt(Da^2)
+SE=sqrt(1/N+D^2/(2*N))*sqrt(2*(1-0.5))
+CIp=Da2+(SE*1.96)
+CIn=Da2-(SE*1.96)
+DSE=c(Da2,SE,CIn,CIp)}
+```
+
+We next read in a .csv file which contains the data we have collected from our contributing papers. This is an idealised case where we have the same information reported for each paper (the p value and N).
+
+```{r}
+DATAFILE=read.csv("CH_03_data.csv")
+head(DATAFILE)
+```
+
+Here we loop through the dataframe and compute Cohen's d and the SE of d. 
+
+```{r}
+
+DATAFILE$d=rep(0,nrow(DATAFILE))
+DATAFILE$SE=rep(0,nrow(DATAFILE))
+
+for (i in 1:nrow(DATAFILE)){
+  temp=ptoD(DATAFILE$pval[i],DATAFILE$N[i])
+ DATAFILE$d[i]=temp[1]
+ DATAFILE$SE[i]=temp[2]
+}
+head(DATAFILE)  
+
+```
+Now we have everything we need to fit a model to the data.
+
+```{r}
+library(metafor)
+
+model=rma(data=DATAFILE,yi=d,sei=SE)
+
+```
+
+Before we look at the output, lets talk about the inputs.
+
+
+1. *data* is the name of the dataframe containing the effect sizes and their variance.
+2. *yi* is the name of the column specifying the location of the effect sizes. Note that there is no requirement to specify the type of effect size metic.
+3. *sei* is the name of the column specifying the location of the standard errors for d. Note that we could just as easily use *'vi='* if we calculated the variances instead of standard errors.
+
+## Fixed and random effects models.
