@@ -97,7 +97,7 @@ This is all very straightforward, and in most cases this all we need to specify 
 ## Fixed and random effects models.
 
 
-With meta analysis, we generally want to come up with some overall effect size estimate based on the contributing effect sizes. This is conceptually similar to just a big weighted regression. We are just estimating a parameter (a beta weight) that minimises the residuals between our regrssion line and the empirical data. Obviously though, it doesn't make sense for all studies to be weighted in the same way - a study with 10 participants shouldnt contribute to the estimate as much as a study with 100 participants. Therefore, we use an *inverse weighting* scheme, wherein studies with a larger variance/standard error are given less weight in our calculation.
+With meta analysis, we generally want to come up with some overall effect size estimate based on the contributing effect sizes. This is conceptually similar to just a big weighted regression. We are just estimating a parameter (a beta weight) that minimises the residuals between our regression line and the empirical data. Obviously though, it doesn't make sense for all studies to be weighted in the same way - a study with 10 participants shouldnt contribute to the estimate as much as a study with 100 participants. Therefore, we use an *inverse weighting* scheme, wherein studies with a larger variance/standard error are given less weight in our calculation.
 
 This is all quite straightforward. However, there are two types of model that we can employ for meta analyses - fixed effects and random effects models. These models differ with respect to how they assign weights to individual studies.
 
