@@ -32,7 +32,7 @@ You can view the first chapter [here](CH_01_Introduction.md). Below is a full in
 | --- | --- |
 | 1 | [Introduction](CH_01_Introduction.md) | 
 | 2 | [Gathering Data](CH_02_Gathering_data.md) | 
-| 3 | Creating and interacting with model objects |
+| 3 | [Creating and interacting with model objects](CH_03_Creating_and_interacting_with_models.md) |
 | 4 | Testing the robustness of models |
 | 5 | Publication bias |
 | 6 | Moderator analysis | 
