@@ -1,1 +1,1 @@
-Study,Date,pval,NTom,1999,0.01,11Dick,2000,0.056,34Harry,2001,0.34,12
+Study,Date,pval,N,DirTom,1999,0.001,11,1Dick,2000,0.056,34,1Harry,2001,0.5,12,1Dasher,2002,0.2,98,1Dancer,2003,0.2,56,2Prancer,2004,0.01,15,1Vixen,2005,0.1,39,1Comet,2006,0.001,41,2Cupid,2007,0.2,34,2Donner,2008,0.002,12,1Blitzen,2009,0.1,88,2

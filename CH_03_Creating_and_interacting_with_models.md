@@ -6,11 +6,7 @@ output:
 ---
 ![](https://images2.imgbox.com/24/71/0KH49y9V_o.png "Title")
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-setwd("/Users/nicholashedger/Documents/BHISMALAB_META")
 
-```
 
 ## Creating and interacting with model objects.
 
@@ -27,7 +23,8 @@ At a minimum, metafor requires a dataframe that specifies the effect sizes and s
 First, we define a function for computing our effect sizes.
 
 
-```{r}
+
+```r
 ptoD=function(p,N)
 {T=qt(p/2,N-1)
 D=T/sqrt(N)
@@ -43,17 +40,28 @@ DSE=c(Da2,SE,CIn,CIp)}
 We next read in a .csv file which contains the data we have collected from our contributing papers. This is an idealised case where we have the same information reported for each paper (the p value and N).
 
 
-```{r}
+
+```r
 DATAFILE=read.csv("CH_03_data.csv")
 head(DATAFILE)
+```
+
+```
+##     Study Date  pval  N Dir
+## 1     Tom 1999 0.001 11   1
+## 2    Dick 2000 0.056 34   1
+## 3   Harry 2001 0.500 12   1
+## 4  Dasher 2002 0.200 98   1
+## 5  Dancer 2003 0.200 56   2
+## 6 Prancer 2004 0.010 15   1
 ```
 
 
 Here we loop through the dataframe, compute Cohen's d and the SE of d and throw them into new columns of our dataframe. 
 
 
-```{r}
 
+```r
 DATAFILE$d=rep(0,nrow(DATAFILE))
 DATAFILE$SE=rep(0,nrow(DATAFILE))
 
@@ -66,18 +74,38 @@ for (i in 1:nrow(DATAFILE)){
  }
 }
 head(DATAFILE)  
+```
 
+```
+##     Study Date  pval  N Dir          d        SE
+## 1     Tom 1999 0.001 11   1  1.3830005 0.4217221
+## 2    Dick 2000 0.056 34   1  0.3397029 0.1763769
+## 3   Harry 2001 0.500 12   1  0.2013351 0.2915859
+## 4  Dasher 2002 0.200 98   1  0.1303440 0.1014434
+## 5  Dancer 2003 0.200 56   2 -0.1733369 0.1346306
+## 6 Prancer 2004 0.010 15   1  0.7686175 0.2938692
 ```
 
 
 Now we have everything we need to fit a simple model to the data.
 
 
-```{r}
+
+```r
 library(metafor)
+```
 
+```
+## Loading required package: Matrix
+```
+
+```
+## Loading 'metafor' package (version 2.0-0). For an overview 
+## and introduction to the package please type: help(metafor).
+```
+
+```r
 model=rma(data=DATAFILE,yi=d,sei=SE)
-
 ```
 
 
@@ -122,9 +150,33 @@ All this is a long way of explaining that the *rma* command we specififed earlie
 Now lets have a look at the rma object we created earlier. As per most model objects in R, we can print a digestible summary of the important outputs via the summary() command.
 
 
-```{r}
-summary(model)
 
+```r
+summary(model)
+```
+
+```
+## 
+## Random-Effects Model (k = 11; tau^2 estimator: REML)
+## 
+##   logLik  deviance       AIC       BIC      AICc  
+##  -8.4620   16.9239   20.9239   21.5291   22.6382  
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.2224 (SE = 0.1206)
+## tau (square root of estimated tau^2 value):      0.4716
+## I^2 (total heterogeneity / total variability):   88.70%
+## H^2 (total variability / sampling variability):  8.85
+## 
+## Test for Heterogeneity: 
+## Q(df = 10) = 52.6242, p-val < .0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval    ci.lb   ci.ub   
+##   0.2034  0.1573  1.2924  0.1962  -0.1050  0.5117   
+## 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 
@@ -142,13 +194,6 @@ On the following few lines, we have several measures of heterogeneity, which are
 *Q* is the total amount of heterogeneity between studies. Q is distributed as a chi-square statistic with k-1 degrees of freedom. If Q is notably greater than the degrees of freedom, then this suggests that the heterogeneity between studies is greater than that expected from sampling variability alone. On some level, it can be seen of as an evaluation of whether the assumptions of a fixed effects model were violated.
 
 The remaining output under the "Model Results" section should be straightforward to interpret. The *estimate* is the pooled meta-analytic estimate of the effect size. The *se* is its standard error and the *pval* evaluates the null hypothesis based on the meta-analytic combination of effects. *ci.lb* and *ci.ub* are the lower and upper bounds of the 95% confidence interval respectively.
-
-Of course, all these properties of the model object can be returned directly, as follows:
-
-```{r}
-model$pval
-```
-
 
 ***
 
@@ -178,7 +223,8 @@ In the example above, this would all be would be reported as follows:
 The forest plot is the most common, intuitive way of ploting the results of a meta analysis. Here I define a function for creating a forest plot from a rma model object. We plot the individual effect sizes and their 95% confidence intervals. We also plot a shaded region that demarcates the combined effect size as estimated by the random effects model. We could just as easily do something very similar using the metafor function 'forest()', but the graphics are not as nice.
 
 
-```{r}
+
+```r
 library(ggplot2)
 plotforest=function(model){
   
@@ -201,6 +247,8 @@ plotforest=function(model){
 plotforest(model)
 ```
 
+![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 
 Because we have plotted 95% confidence intervals, we know that if they pass through zero (grey vertical line) the effect was non-significant. We also see that because our blue region also overlaps with zero our pooled estimate is also non-significant.
 
@@ -209,7 +257,8 @@ Because we have plotted 95% confidence intervals, we know that if they pass thro
 Next I define a function for creating a funnel plot from a rma model object. A funnel plot is typically designed to check for the existence of publication bias. 
 
 
-```{r}
+
+```r
 plotfunnel=function(model){
   frame=get(as.character(model$call$data))
    frame$yi=get(as.character(model$call$yi),frame)
@@ -226,6 +275,8 @@ return(funnel)
 
 plotfunnel(model)
 ```
+
+![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
 The logic of a funnel plot is that there is evidence for publication bias if the distribution of effect sizes is asymetrical about the pooled effect size (dotted line in this plot). Publication bias can be infered if there is asymetry where the standard error is large. This suggests that studies with low power are more likely to be published if they report large effect sizes (associated with significant effects). 
