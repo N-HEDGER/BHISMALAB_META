@@ -215,10 +215,10 @@ model$pval
 In the example above, this would all be would be reported as follows:
 
 
-**Method section: **
+**Method section:**
 *"We made an a priori decision to analyze our effect size data in a random effects model, due to its tolerance of heterogeneous effect sizes and conservative nature of estimation (Cumming, 2012). The random effects model assumes that each study estimates different values from a distribution of population parameters, rather than assuming that studies are direct replications of each other (Schmidt, Oh, & Hayes, 2009). We assessed heterogeneity across effect sizes by using Cochran’s Q and I^2 statistics."*
 
-**Results section: **
+**Results section:**
 *"A random effects model revealed that the pooled effect size was small and did not reach significance  (k = 11, N = 440, dz = 0.20, 95% CI [-0.11 0.51], p = .196)."*
 
 *"Substantial heterogeneity was detected (Q(10) =52.62, p<.001) and the I^2 statistic indicated that 88% of the heterogeneity could not be accounted for by sampling variability"*
