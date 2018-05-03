@@ -236,13 +236,16 @@ head(DATAFILE)  </code></pre>
 <p><em>I^2</em> describes the proportion of heterogeneity beyond that explained by sampling variability. It is essentially an expression of the inconsistency between studies. If there is little inconsistency in study results then I^2 will tend towards 0. If I^2 is 0 then the fixed and random effects models will have identical estimates of the pooled effect size.</p>
 <p><em>Q</em> is the total amount of heterogeneity between studies. Q is distributed as a chi-square statistic with k-1 degrees of freedom. If Q is notably greater than the degrees of freedom, then this suggests that the heterogeneity between studies is greater than that expected from sampling variability alone. On some level, it can be seen of as an evaluation of whether the assumptions of a fixed effects model were violated.</p>
 <p>The remaining output under the “Model Results” section should be straightforward to interpret. The <em>estimate</em> is the pooled meta-analytic estimate of the effect size. The <em>se</em> is its standard error and the <em>pval</em> evaluates the null hypothesis based on the meta-analytic combination of effects. <em>ci.lb</em> and <em>ci.ub</em> are the lower and upper bounds of the 95% confidence interval respectively.</p>
+<p>Of course, all these properties of the model object can be returned directly, as follows:</p>
+<pre class="r"><code>model$pval</code></pre>
+<pre><code>## [1] 0.1962253</code></pre>
 <hr />
 </div>
 <div id="reporting-the-meta-analytic-model." class="section level2">
 <h2>Reporting the meta analytic model.</h2>
 <p>In the example above, this would all be would be reported as follows:</p>
-<p><strong>Method section</strong> <em>“We made an a priori decision to analyze our effect size data in a random effects model, due to its tolerance of heterogeneous effect sizes and conservative nature of estimation (Cumming, 2012). The random effects model assumes that each study estimates different values from a distribution of population parameters, rather than assuming that studies are direct replications of each other (Schmidt, Oh, &amp; Hayes, 2009). We assessed heterogeneity across effect sizes by using Cochran’s Q and I^2 statistics.”</em></p>
-<p><strong>Results section</strong> <em>“A random effects model revealed that the pooled effect size was small and did not reach significance (k = 11, N = 440, dz = 0.20, 95% CI [-0.11 0.51], p = .196).”</em></p>
+<p><strong>Method section: </strong> <em>“We made an a priori decision to analyze our effect size data in a random effects model, due to its tolerance of heterogeneous effect sizes and conservative nature of estimation (Cumming, 2012). The random effects model assumes that each study estimates different values from a distribution of population parameters, rather than assuming that studies are direct replications of each other (Schmidt, Oh, &amp; Hayes, 2009). We assessed heterogeneity across effect sizes by using Cochran’s Q and I^2 statistics.”</em></p>
+<p><strong>Results section: </strong> <em>“A random effects model revealed that the pooled effect size was small and did not reach significance (k = 11, N = 440, dz = 0.20, 95% CI [-0.11 0.51], p = .196).”</em></p>
 <p><em>“Substantial heterogeneity was detected (Q(10) =52.62, p&lt;.001) and the I^2 statistic indicated that 88% of the heterogeneity could not be accounted for by sampling variability”</em></p>
 <hr />
 </div>
@@ -250,7 +253,7 @@ head(DATAFILE)  </code></pre>
 <h2>Useful visualisations for meta analysis models.</h2>
 <div id="forest-plots." class="section level3">
 <h3>Forest plots.</h3>
-<p>The forest plot is the most common, intuitive way of ploting the results of a meta analysis. Here I define a function for creating a forest plot from a rma model object. We plot the individual effect sizes and their 95% confidence intervals. We also plot a shaded region that demarcates the combined effect size as estimated by the random effects model. We could just as easily do something very similar using the metafor function ‘forest()’, but the graphics are not as nice.</p>
+<p>The forest plot is the most common, intuitive way of plotting the results of a meta analysis. Here I define a function for creating a forest plot from a rma model object. We plot the individual effect sizes and their 95% confidence intervals. We also plot a shaded region that demarcates the combined effect size as estimated by the random effects model. We could just as easily do something very similar using the metafor function ‘forest()’, but the graphics are not as nice.</p>
 <pre class="r"><code>library(ggplot2)
 plotforest=function(model){
   

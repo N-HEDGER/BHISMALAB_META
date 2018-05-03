@@ -195,6 +195,18 @@ On the following few lines, we have several measures of heterogeneity, which are
 
 The remaining output under the "Model Results" section should be straightforward to interpret. The *estimate* is the pooled meta-analytic estimate of the effect size. The *se* is its standard error and the *pval* evaluates the null hypothesis based on the meta-analytic combination of effects. *ci.lb* and *ci.ub* are the lower and upper bounds of the 95% confidence interval respectively.
 
+Of course, all these properties of the model object can be returned directly, as follows:
+
+
+```r
+model$pval
+```
+
+```
+## [1] 0.1962253
+```
+
+
 ***
 
 ## Reporting the meta analytic model.
@@ -203,10 +215,10 @@ The remaining output under the "Model Results" section should be straightforward
 In the example above, this would all be would be reported as follows:
 
 
-**Method section**
+**Method section: **
 *"We made an a priori decision to analyze our effect size data in a random effects model, due to its tolerance of heterogeneous effect sizes and conservative nature of estimation (Cumming, 2012). The random effects model assumes that each study estimates different values from a distribution of population parameters, rather than assuming that studies are direct replications of each other (Schmidt, Oh, & Hayes, 2009). We assessed heterogeneity across effect sizes by using Cochran’s Q and I^2 statistics."*
 
-**Results section**
+**Results section: **
 *"A random effects model revealed that the pooled effect size was small and did not reach significance  (k = 11, N = 440, dz = 0.20, 95% CI [-0.11 0.51], p = .196)."*
 
 *"Substantial heterogeneity was detected (Q(10) =52.62, p<.001) and the I^2 statistic indicated that 88% of the heterogeneity could not be accounted for by sampling variability"*
@@ -220,7 +232,7 @@ In the example above, this would all be would be reported as follows:
 ### Forest plots.
 
 
-The forest plot is the most common, intuitive way of ploting the results of a meta analysis. Here I define a function for creating a forest plot from a rma model object. We plot the individual effect sizes and their 95% confidence intervals. We also plot a shaded region that demarcates the combined effect size as estimated by the random effects model. We could just as easily do something very similar using the metafor function 'forest()', but the graphics are not as nice.
+The forest plot is the most common, intuitive way of plotting the results of a meta analysis. Here I define a function for creating a forest plot from a rma model object. We plot the individual effect sizes and their 95% confidence intervals. We also plot a shaded region that demarcates the combined effect size as estimated by the random effects model. We could just as easily do something very similar using the metafor function 'forest()', but the graphics are not as nice.
 
 
 
@@ -247,7 +259,7 @@ plotforest=function(model){
 plotforest(model)
 ```
 
-![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
 Because we have plotted 95% confidence intervals, we know that if they pass through zero (grey vertical line) the effect was non-significant. We also see that because our blue region also overlaps with zero our pooled estimate is also non-significant.
@@ -276,7 +288,7 @@ return(funnel)
 plotfunnel(model)
 ```
 
-![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](CH_03_Creating_and_interacting_with_models_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 
 The logic of a funnel plot is that there is evidence for publication bias if the distribution of effect sizes is asymetrical about the pooled effect size (dotted line in this plot). Publication bias can be infered if there is asymetry where the standard error is large. This suggests that studies with low power are more likely to be published if they report large effect sizes (associated with significant effects). 
